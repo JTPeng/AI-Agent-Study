@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { ChatOpenAI } from "@langchain/openai";
+import { ChatAnthropic } from "@langchain/anthropic";
 import {
   HumanMessage,
   SystemMessage,
@@ -13,8 +14,8 @@ import {
   writeFileTool,
 } from "./all-tools.mjs";
 
-const model = new ChatOpenAI({
-  // modelName: "qwen-plus",
+const model = new ChatAnthropic({
+  modelName: process.env.MODEL_NAME,
   apiKey: process.env.OPENAI_API_KEY,
   temperature: 0,
   configuration: {
@@ -56,9 +57,8 @@ async function runAgentWithTools(query, maxIterations = 30) {
 回复要简洁，只说做了什么`),
     new HumanMessage(query),
   ];
-
   for (let i = 0; i < maxIterations; i++) {
-    console.log(chalk.bgGreen(`⏳ 正在等待 AI 思考...`));
+    console.log(chalk.bgGreen(`⏳ 正在等待 AI 思考...`, messages));
     const response = await modelWithTools.invoke(messages);
     messages.push(response); // 检查是否有工具调用
 
@@ -86,7 +86,7 @@ async function runAgentWithTools(query, maxIterations = 30) {
 
 const case1 = `创建一个功能丰富的 React TodoList 应用：
 
-1. 创建项目：echo -e "n\nn" | pnpm create vite react-todo-app --template react-ts
+1. 创建项目：echo -e "n\nn" | pnpm create vite react-todo-app-2 --template react-ts
 2. 修改 src/App.tsx，实现完整功能的 TodoList：
  - 添加、删除、编辑、标记完成
  - 分类筛选（全部/进行中/已完成）
