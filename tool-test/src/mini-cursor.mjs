@@ -58,7 +58,7 @@ async function runAgentWithTools(query, maxIterations = 30) {
     new HumanMessage(query),
   ];
   for (let i = 0; i < maxIterations; i++) {
-    console.log(chalk.bgGreen(`⏳ 正在等待 AI 思考...`, messages));
+    console.log(chalk.bgGreen(`⏳ 正在等待 AI 思考...`));
     const response = await modelWithTools.invoke(messages);
     messages.push(response); // 检查是否有工具调用
 
